@@ -1,8 +1,8 @@
 let mongoose = require('mongoose')
 let Schema = mongoose.Schema
+let schemaName = 'Playlist'
 let ObjectId = Schema.Types.ObjectId
 
-let schemaName = 'WatchList'
 
 let schema = new Schema({
     song: {type: String},
@@ -10,3 +10,5 @@ let schema = new Schema({
     album: {type: String},
     imgUrl: {type: String}
 })
+
+module.exports = mongoose.model(schemaName, schema)

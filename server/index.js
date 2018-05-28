@@ -27,8 +27,9 @@ app.use(bp.urlencoded({
 //     next()
 // ))
 
-var XXX = require('./routes/XXX')
-app.use(XXX.router)
+var playlist = require('./routes/playlist')
+
+app.use(playlist.router)
 
 
 app.get('*', (req, res, next) =>{

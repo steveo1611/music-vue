@@ -36,25 +36,19 @@
                 <h3 class="song-title">{{playList.trackName}}</h3>
                 <h3 class="album-title">{{playList.collectionName}}</h3>
                 <p class="artist-name">{{playList.artistName}}</p>
+                <button @click="moveUpPlaylist(playList.trackId)">Move UP Playlist</button>
+                <button @click="moveDownPlaylist(playList.trackId)">Move DOWN Playlist</button>
                 <button @click="removeFromPlaylist(playList.trackId)">Remove from Playlist</button>
               </div>
-          <!-- </a> -->
+  
             </article>
           </div>
         </div>
     </div>
   </div>
+  </div>
+ 
 
-        <!-- >Song: {{search.trackName}} Artist: {{search.artistName}} -->
-      <!-- <ul> 
-        <li v-for="search in getSearch">Song: {{search.trackName}} Artist: {{search.artistName}}
-     </li>
-      </ul>    -->
-    </div>
-  </div>
-  
-  
-  </div>
 </template>
 
 <script>
@@ -85,14 +79,17 @@ export default {
       this.$store.dispatch("getSearchResults", this.query);
       this.query = "";
     },
-      addToPlaylist(search) {
-      this.$store.dispatch('addToPlaylist', search)
+    getPlayList() {
+      this.$store.dispatch("getPlayList");
     },
-    removeFromPlaylist(payload){
-      this.$store.dispatch('removeFromPlaylist', payload)
+    addToPlaylist(search) {
+      this.$store.dispatch("addToPlaylist", search);
+    },
+    removeFromPlaylist(payload) {
+      this.$store.dispatch("removeFromPlaylist", payload);
     }
   }
-} 
+};
 </script>
 
 <style scoped>

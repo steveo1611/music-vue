@@ -29,44 +29,60 @@ export default new vuex.Store({
         listResults(state, songs) {
             state.songs = songs
         },
-        addToPlaylist(state, payload){
+        showPlaylist(state, playList) {
+            state.playList = playList
+        },
+        addToPlaylist(state, payload) {
             state.playList.push(payload)
         },
-        removeFromPlaylist(state, payload){
+        removeFromPlaylist(state, payload) {
             state.playList.splice(payload, 1)
         }
     },
 
     actions: {
-        getSearchResults({dispatch, commit}, payload) {
+        getSearchResults({ dispatch, commit }, payload) {
             api.get(payload)
                 .then(res => {
-                // commit('listResults', res.data.results)
-                commit('listResults', res.data.results)
+                    // commit('listResults', res.data.results)
+                    commit('listResults', res.data.results)
                 })
-                .catch(err =>{
+                .catch(err => {
                     // alert(err.response.data.message)
                     alert("error")
                 })
         },
-        addToPlaylist({commit, dispatch, state}, payload){
-            if (state.playList.find(s => s.trackId == payload.trackId )){
+        getPlayList({ dispatch, commit }) {
+            db.get('playlist')
+                .then(res => {
+                    commit('showPlaylist', res.data)
+                })
+        },
+
+
+        addToPlaylist({ commit, dispatch, state }, payload) {
+            if (state.playList.find(s => s.trackId == payload.trackId)) {
                 return dispatch('showNotification', {
                     type: 'error',
                     message: 'That song is already in your list'
-                  })
+                })
             }
             commit('addToPlaylist', payload)
         },
-        removeFromPlaylist({commit, dispatch, state}, payload){
-            if  (state.playList.IndexOf(payload) != -1)
-            return commit('removeFromPlaylist',state.playList.IndexOf(payload) )
+        removeFromPlaylist({ commit, dispatch, state }, payload) {
+            //  debugger BUG BUG: not working correctly need to fix later
+            let index = state.playList.findIndex(i => i.trackId == state.playList.trackId)
+            //  return index
+
+            // var test = state.playList.indexOf(payload)
+            console.log(index)
+            commit('removeFromPlaylist', index)
         },
-    
+
         showNotification({
             commit
-          }, notification) {
+        }, notification) {
             console.log(notification)
-          },
+        },
     },
 })
