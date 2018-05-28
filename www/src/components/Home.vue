@@ -4,7 +4,7 @@
     <div class="topMusic">
     <form @submit.prevent='getSearchRes'>
     <input type="text" v-model="query">
-    <button @click="getSearchRes">Search</button>
+    <!-- <button @click="getSearchRes">Search</button> -->
     </form>
     <div class="container-fluid">
       <div class="row">
@@ -19,6 +19,24 @@
                 <h3 class="song-title">{{search.trackName}}</h3>
                 <h3 class="album-title">{{search.collectionName}}</h3>
                 <p class="artist-name">{{search.artistName}}</p>
+                <button @click="addToPlaylist(search)">Add to Playlist</button>
+              </div>
+          <!-- </a> -->
+            </article>
+          </div>
+        </div>
+        <div class="col-6">
+          <h3>Play List:</h3> 
+
+            <article v-for="playList in playList" class="card">
+          <!-- <a :href="search.previewUrl" target="_blank"> -->
+              <div class="image">
+              <img :src="playList.artworkUrl100" :alt="playList.collectionName"></div>
+              <div class = "description">
+                <h3 class="song-title">{{playList.trackName}}</h3>
+                <h3 class="album-title">{{playList.collectionName}}</h3>
+                <p class="artist-name">{{playList.artistName}}</p>
+                <button @click="removeFromPlaylist(playList.trackId)">Remove from Playlist</button>
               </div>
           <!-- </a> -->
             </article>
@@ -55,8 +73,8 @@ export default {
   //   };
   //  },
   computed: {
-    songCol() {
-      return this.$store.state.songCol;
+    playList() {
+      return this.$store.state.playList;
     },
     getSearch() {
       return this.$store.state.songs;
@@ -66,9 +84,15 @@ export default {
     getSearchRes() {
       this.$store.dispatch("getSearchResults", this.query);
       this.query = "";
+    },
+      addToPlaylist(search) {
+      this.$store.dispatch('addToPlaylist', search)
+    },
+    removeFromPlaylist(payload){
+      this.$store.dispatch('removeFromPlaylist', payload)
     }
   }
-};
+} 
 </script>
 
 <style scoped>

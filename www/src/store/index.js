@@ -22,14 +22,19 @@ vue.use(vuex)
 export default new vuex.Store({
     state: {
         songs: [],
-        songList: [],
+        playList: [],
 
     },
     mutations: {
         listResults(state, songs) {
             state.songs = songs
+        },
+        addToPlaylist(state, payload){
+            state.playList.push(payload)
+        },
+        removeFromPlaylist(state, payload){
+            state.playList.splice(payload, 1)
         }
-
     },
 
     actions: {
@@ -43,6 +48,25 @@ export default new vuex.Store({
                     // alert(err.response.data.message)
                     alert("error")
                 })
-        }
+        },
+        addToPlaylist({commit, dispatch, state}, payload){
+            if (state.playList.find(s => s.trackId == payload.trackId )){
+                return dispatch('showNotification', {
+                    type: 'error',
+                    message: 'That song is already in your list'
+                  })
+            }
+            commit('addToPlaylist', payload)
+        },
+        removeFromPlaylist({commit, dispatch, state}, payload){
+            if  (state.playList.IndexOf(payload) != -1)
+            return commit('removeFromPlaylist',state.playList.IndexOf(payload) )
+        },
+    
+        showNotification({
+            commit
+          }, notification) {
+            console.log(notification)
+          },
     },
 })
