@@ -8,7 +8,7 @@ import axios from 'axios'
 let api = axios.create({
     // baseURL:'https://itunes.apple.com/search?media=music&term=' + artist,
     baseURL: 'https://itunes.apple.com/search?media=music&term=',
-    timeout: 3000
+    timeout: 5000
 })
 
 let db = axios.create({
@@ -34,7 +34,6 @@ export default new vuex.Store({
 
     actions: {
         getSearchResults({dispatch, commit}, payload) {
-            console.log(payload)
             api.get(payload)
                 .then(res => {
                 // commit('listResults', res.data.results)
