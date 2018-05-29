@@ -5,13 +5,13 @@ import axios from 'axios'
 
 
 
-let api = axios.create({
+let music = axios.create({
     // baseURL:'https://itunes.apple.com/search?media=music&term=' + artist,
     baseURL: 'https://itunes.apple.com/search?media=music&term=',
     timeout: 5000
 })
 
-let db = axios.create({
+let api = axios.create({
     baseURL: '//localhost:3000/api/',
     timeout: 3000
     // withCredentials: true
@@ -42,7 +42,7 @@ export default new vuex.Store({
 
     actions: {
         getSearchResults({ dispatch, commit }, payload) {
-            api.get(payload)
+            music.get(payload)
                 .then(res => {
                     // commit('listResults', res.data.results)
                     commit('listResults', res.data.results)
@@ -52,8 +52,9 @@ export default new vuex.Store({
                     alert("error")
                 })
         },
+
         getPlayList({ dispatch, commit }) {
-            db.get('playlist')
+            api.get('playlist')
                 .then(res => {
                     commit('showPlaylist', res.data)
                 })
@@ -67,8 +68,12 @@ export default new vuex.Store({
                     message: 'That song is already in your list'
                 })
             }
+            api.put('lists/'+ payload.trackId, payload)
+            // api.put('playlist/' ,payload)
             commit('addToPlaylist', payload)
         },
+        
+        
         removeFromPlaylist({ commit, dispatch, state }, payload) {
             //  debugger BUG BUG: not working correctly need to fix later
             let index = state.playList.findIndex(i => i.trackId == state.playList.trackId)
