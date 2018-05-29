@@ -68,7 +68,7 @@ export default new vuex.Store({
                     message: 'That song is already in your list'
                 })
             }
-            api.put('lists/'+ payload.trackId, payload)
+            api.put('playlists/'+ payload.trackId, payload)
             // api.put('playlist/' ,payload)
             commit('addToPlaylist', payload)
         },

@@ -2,73 +2,68 @@ var router = require('express').Router()
 var Playlist = require('../models/playlist')
 
 
-router.get('api/lists', (req, res, next) => {
-    Playlist.find({})
-        .then(playlist => {
-            res.status(200).send(playlist)
+router.get('/api/playlists/:id?', (req, res) =>{
+    if(req.params.id){
+        Playlist.findById(req.params.id)
+        .then(playlists=>{
+            res.send(playlist)
         })
-        .catch(err => {
+.catch(errors=>{
+    res.status(404).send({'error': 'No Playlist at that ID'})
+})
+    }
+    Playlist.find({})
+    .then(playlists=>{
+        res.send(playlist)
+    })
+    .catch(err =>{
+        res.status(400).send(err)
+    })
+})
+
+router.post('/api/playlists', (req, res)=>{
+    Playlist.create(req.body)
+        .then(newPlaylist=>{
+            return res.send(newPlaylist)
+        })
+        .catch(err =>{
             res.status(400).send(err)
         })
 })
 
-router.put('/api/playlist', (req, res, next)=> {
-    // debugger
-    Playlist.songs.create(req.body).then(playlist => {
-    Playlist.songs.id.push(req.body).then(playlist => {
-    {$addToSet: { songs: req.body}}
-    res.send(playlist)
+//PUT
+//Add a single song
+router.put('api/playlists/:id/songs', (req, res)=>{
+Playlist.findById(req.param.id)
+.then(function (playlists) {
+    playlist.songs.addToSet(req.body)
+    playlist.save()
 })
+.catch(err =>{
+    res.status(400).send(err)
 })
 })
 
-router.post('/api/lists/:listId', (req, res, next) =>{
-    Lists.findByIdAndUpdate(req.params.listId, req.body).then(list => {
-    res.send(list)
+//Update entire song array from entir playlist
+router.put('/api/playlists/:id', (req, res)=>{
+    Playlist.findByIdAndUpdate(req.params.id, req.body,{new: true})
+    .then(playlist=>{
+        res.send(playlist)
     })
-    })
-    
-router.put('/api/lists/:listId/songs', (req, rew, next) =>{
-    Lists.findById(req.params.listId).then(list => {
-        list.songs.$addToSet(req.body)
+    .catch(err =>{
+        res.status(400).send(err)
     })
 })
 
-
-
-// router.put('/api/lists/:listId', (req, res, next) =>{
-//     // Playlist.findById(req.params.id).then(playlist =>{
-//       Playlist.findOne({_id:req.body.trackId}, function(err,doc){ 
-            
-//         // if(err);
-//         //     res.sendStatus(500).send('database error' ).end();
-//         // if(!doc){
-//         //     res.sendStatus(404).send('Song was not found').end()
-//         // }else{
-//        var doc = Playlist.songSchema.id(_id)
-//        debugger
-//         doc.songs.push({trackName: req.body.trackName});
-       
-//         doc.markModified('songs')
-//         doc.save();
-//          res.sendStatus(200).send('song saved').end();
-//         })
-//      })
-    
-    
-    
-    
-    // Playlist.findById(req.params.id, function (err, req){}).then(playlist =>{
-    // //    debugger
-    //     playlist.$addToSet(req.body)
-    //     // {$addToSet: { playlist.songs: req.body}}
-    //     playlist.save().then(() =>{
-    //     res.send(playlist)
-    //     })
-        // })
-    // })
-
-
+router.delete('/api/playlists/:id', (req, res)=>{
+    Playlist.findByIdAndRemove(req.params.id)
+    .then(oldPlaylist =>{
+        res.send("successfullly deleted")
+    })
+    .catch(err=>{
+        res.send(err)
+    })
+})
 
 module.exports = {
     router
