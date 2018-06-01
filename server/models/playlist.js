@@ -3,19 +3,18 @@ let Schema = mongoose.Schema
 // let ObjectId = Schema.Types.ObjectId
 let schemaName = 'Playlist'
 
-let song = new Schema({
-    title: String,
-    albumArt: String,
-    artist: String,
-    album: String,
-    preview: String,
-    price: String
+let songSchema = new Schema({
+    trackName: {type: String},
+    albumArt: {type: String},
+    artistName: {type: String},
+    album: {type: String},
+    preview: {type: String},
+    price: {type: String}
 })
 
-
 let playlist = new Schema({
-    title: String,
-    songs: [song]
+    beep: {type: String}
+    // songs: [songSchema]
 })
 
 

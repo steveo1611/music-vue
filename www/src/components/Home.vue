@@ -2,63 +2,43 @@
   <div class="Home">
     <h1>Welcome to Stevie's Music <img id='vuePic' src="../assets/logo.png">ue Shop</h1>
     <div class="topMusic">
-    <form @submit.prevent='getSearchRes'>
-    <input type="text" v-model="query">
-    <!-- <button @click="getSearchRes">Search</button> -->
-    </form>
+
     <div class="container-fluid">
       <div class="row">
         <div class="col-6">
-          <h3>Results:</h3> 
-            <div class ="songs">
-            <article v-for="search in getSearch" class="card">
-          <!-- <a :href="search.previewUrl" target="_blank"> -->
-              <div class="image">
-              <img :src="search.artworkUrl100" :alt="search.collectionName"></div>
-              <div class = "description">
-                <h3 class="song-title">{{search.trackName}}</h3>
-                <h3 class="album-title">{{search.collectionName}}</h3>
-                <p class="artist-name">{{search.artistName}}</p>
-                <button @click="addToPlaylist(search)">Add to Playlist</button>
-              </div>
-          <!-- </a> -->
-            </article>
-          </div>
+
+<!-- itunes section -->
+<itunes-search></itunes-search>
+
         </div>
         <div class="col-6">
-          <h3>Play List:</h3> 
-
-            <article v-for="playList in playList" class="card">
-          <!-- <a :href="search.previewUrl" target="_blank"> -->
-              <div class="image">
-              <img :src="playList.artworkUrl100" :alt="playList.collectionName"></div>
-              <div class = "description">
-                <h3 class="song-title">{{playList.trackName}}</h3>
-                <h3 class="album-title">{{playList.collectionName}}</h3>
-                <p class="artist-name">{{playList.artistName}}</p>
-                <button @click="moveUpPlaylist(playList.trackId)">Move UP Playlist</button>
-                <button @click="moveDownPlaylist(playList.trackId)">Move DOWN Playlist</button>
-                <button @click="removeFromPlaylist(playList.trackId)">Remove from Playlist</button>
-              </div>
-  
-            </article>
-          </div>
-        </div>
+  <all-Playlists></all-Playlists>      
+<!-- //playlist section -->
     </div>
   </div>
   </div>
- 
+   </div>
+  </div>
 
 </template>
 
 <script>
+import itunesSearch from './ItunesSearch'
+import playlist from './Playlist'
+import allPlaylists from './AllPlaylists'
+
 export default {
   name: "Home",
+  components:{
+    itunesSearch,
+    playlist,
+    allPlaylists
+  },
   data() {
     return {
       search: "",
       // songId: this.$route.params.songId,
-      query: ""
+
     };
   },
   // data() {
@@ -67,32 +47,15 @@ export default {
   //   };
   //  },
   computed: {
-    playList() {
-      return this.$store.state.playList;
-    },
-    getSearch() {
-      return this.$store.state.songs;
-    }
+
   },
   methods: {
-    getSearchRes() {
-      this.$store.dispatch("getSearchResults", this.query);
-      this.query = "";
-    },
-    getPlayList() {
-      this.$store.dispatch("getPlayList");
-    },
-    addToPlaylist(search) {
-      this.$store.dispatch("addToPlaylist", search);
-    },
-    removeFromPlaylist(payload) {
-      this.$store.dispatch("removeFromPlaylist", payload);
-    }
+   
   }
 };
 </script>
 
-<style scoped>
+<style>
 #vuePic {
   width: 1.5rem;
 }

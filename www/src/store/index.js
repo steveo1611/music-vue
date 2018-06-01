@@ -22,12 +22,15 @@ vue.use(vuex)
 export default new vuex.Store({
     state: {
         songs: [],
-        playList: [],
-
+        currentPlayList: {song:[]},
+        allPlaylists: []
     },
     mutations: {
         listResults(state, songs) {
             state.songs = songs
+        },
+        setCurrentPlaylist(state, playlist) {
+            state.currentPlayList = playlist
         },
         showPlaylist(state, playList) {
             state.playList = playList
@@ -37,10 +40,23 @@ export default new vuex.Store({
         },
         removeFromPlaylist(state, payload) {
             state.playList.splice(payload, 1)
+        },
+        setAllPlaylists(state, playLists){
+            state.allPlaylists = playlists
+        },
+        addPlaylist(state, playlist){
+            state.allPlaylists.push(playlist)
         }
     },
 
     actions: {
+        createPlaylist({dispatch, commit}, playlist){
+           music.post('playlists', playlist)
+           .then(res => {
+                commit('addPlaylist', playlist)
+           })
+        },
+      
         getSearchResults({ dispatch, commit }, payload) {
             music.get(payload)
                 .then(res => {
@@ -53,6 +69,16 @@ export default new vuex.Store({
                 })
         },
 
+        createPlaylist({commit, dispatch}, payload){
+            api.post('playlists')
+            .then(res => {
+                commit('addPlaylist', payload)
+            })
+            .catch(err => {
+                alert('error')
+            })
+        },
+
         getPlayList({ dispatch, commit }) {
             api.get('playlist')
                 .then(res => {
@@ -61,6 +87,13 @@ export default new vuex.Store({
         },
 
 
+     getAllPlaylists({ commit, dispatch}){
+         music.get('playlists')
+            .then(res =>{
+                commit('setAllPlaylists', res.data)
+            })
+     },
+
         addToPlaylist({ commit, dispatch, state }, payload) {
             if (state.playList.find(s => s.trackId == payload.trackId)) {
                 return dispatch('showNotification', {
@@ -68,9 +101,15 @@ export default new vuex.Store({
                     message: 'That song is already in your list'
                 })
             }
-            api.put('playlists/'+ payload.trackId, payload)
+            // console.log('playlists/'+ payload.trackId +'/songs', payload)
+            // api.put('playlists/'+ payload.trackId +'/songs', payload)
+            api.put('song/'+ payload.trackId, payload)
             // api.put('playlist/' ,payload)
             commit('addToPlaylist', payload)
+        },
+
+        selectCurrentPlaylist({commit, dispatch}, list){
+            commit('setCurrentPlaylist', list)
         },
         
         
@@ -80,8 +119,7 @@ export default new vuex.Store({
             //  return index
 
             // var test = state.playList.indexOf(payload)
-            console.log(index)
-            commit('removeFromPlaylist', index)
+                commit('removeFromPlaylist', index)
         },
 
         showNotification({
