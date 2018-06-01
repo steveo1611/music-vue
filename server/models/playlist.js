@@ -3,7 +3,7 @@ let Schema = mongoose.Schema
 // let ObjectId = Schema.Types.ObjectId
 let schemaName = 'Playlist'
 
-let songSchema = new Schema({
+let song = new Schema({
     trackName: {type: String},
     albumArt: {type: String},
     artistName: {type: String},
@@ -13,8 +13,8 @@ let songSchema = new Schema({
 })
 
 let playlist = new Schema({
-    beep: {type: String}
-    // songs: [songSchema]
+    title: {type: String},
+    songs: [song]
 })
 
 

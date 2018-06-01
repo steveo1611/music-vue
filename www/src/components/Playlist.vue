@@ -18,7 +18,6 @@
             </article>
           </div>
         </div>
-  </div>
 </template>
 
 <script>

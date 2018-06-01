@@ -6,24 +6,35 @@ router.get('/api/playlists/:id?', (req, res) => {
     if (req.params.id) {
         Playlist.findById(req.params.id)
             .then(playlists => {
-                res.send(playlist)
+               return res.send(playlist)
             })
             .catch(errors => {
-                res.status(404).send({ 'error': 'No Playlist at that ID' })
+               res.status(404).send({ 'error': 'No Playlist at that ID' })
             })
         }
-         Playlist.find({})
+    })       
+         
+    router.get('/api/playlists', (req, res) => {
+        Playlist.find({})
         .then(playlists => {
-            res.send(playlist)
+              return res.send(playlists)
         })
         .catch(err => {
-            res.status(400).send(err)
+            res.status(400).send({err})
         })
-})
+    })
 
+// router.get('/api/playlists', (req, res) => {
+//     Playlist.find({})
+//     .then(playlists => {
+//        return res.send(playlists)
+//     })
+//     .catch(errors => {
+//         res.status(404).send({ 'error': 'No playlists are available'})
+//     })
+// })
 
 router.post('/api/playlists', (req, res) => {
-    console.log(req.body)
     Playlist.create(req.body)
         .then(newPlaylist => {
             return res.send(newPlaylist)
